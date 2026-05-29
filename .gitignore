@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Environment
+.env
+
+# Test artifacts
+.pytest_cache/
+allure-results/
+reports/
+htmlcov/
+.coverage
+
+# Debug screenshots and XML dumps
+*.png
+*.xml
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Claude internal
+.claude/

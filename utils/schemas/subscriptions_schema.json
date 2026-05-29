@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["page", "statuses"],
+  "properties": {
+    "page": {
+      "type": "object",
+      "required": ["content"],
+      "properties": {
+        "content": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "status"],
+            "properties": {
+              "id": { "type": "string" },
+              "status": {
+                "type": "string"
+              },
+              "paymentOrderPaymentConfirmationUrl": {
+                "type": ["string", "null"]
+              }
+            }
+          }
+        },
+        "totalElements": { "type": "integer" },
+        "number": { "type": "integer" }
+      }
+    },
+    "statuses": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "isLinked": { "type": ["boolean", "null"] }
+  }
+}
