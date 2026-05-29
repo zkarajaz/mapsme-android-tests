@@ -21,8 +21,19 @@ msps_tests/
 │   │   ├── test_payment_methods.py
 │   │   ├── test_subscriptions.py
 │   │   └── test_payment.py
-│   └── ui/                     # UI-тесты на Appium (6 тестов)
-│       └── test_ui.py
+│   └── ui/                     # UI-тесты на Appium
+│       ├── test_ui.py          # Тесты подписок (6 тестов)
+│       └── bookmarks/          # Тесты меток и папок (7 модулей, 30+ тестов)
+│           ├── test_bookmark_creation.py
+│           ├── test_bookmark_edit.py
+│           ├── test_bookmark_delete.py
+│           ├── test_folder_management.py
+│           ├── test_map_display.py
+│           ├── test_search_sort.py
+│           ├── test_offline_sync.py
+│           ├── pages/          # Page Object Model
+│           ├── config/         # Локаторы и настройки
+│           └── utils/          # Вспомогательные утилиты
 ├── utils/
 │   ├── helpers.py
 │   └── schemas/                # JSON Schema для валидации ответов
@@ -156,6 +167,97 @@ pytest tests/ui/test_ui.py -v
 
 ---
 
+---
+
+## Тесты меток и папок (tests/ui/bookmarks/)
+
+Отдельный модуль для тестирования функционала меток (bookmarks) и папок в приложении MAPS.ME.
+Использует реальное Android-устройство подключённое по USB.
+
+### Что покрыто
+
+| Файл | Область | Тестов |
+|---|---|---|
+| `test_bookmark_creation.py` | Создание меток на карте | 5 |
+| `test_bookmark_edit.py` | Редактирование названия, описания, цвета | 5 |
+| `test_bookmark_delete.py` | Удаление меток и папок | 4 |
+| `test_folder_management.py` | Создание / переименование / удаление папок | 6 |
+| `test_map_display.py` | Видимость меток на карте, глобальный свитчер | 5 |
+| `test_search_sort.py` | Поиск меток, сортировка по имени / дате / расстоянию | 7 |
+| `test_offline_sync.py` | Создание и редактирование меток без сети | 5 |
+
+### Требования
+
+- Python 3.10+
+- Appium Server 2.x + драйвер UiAutomator2
+- Реальное Android-устройство с включённой USB-отладкой
+- Приложение MAPS.ME установлено и запущено
+- ADB доступен в PATH
+
+### Установка зависимостей
+
+```bash
+pip install appium-python-client selenium pytest allure-pytest Faker
+```
+
+```bash
+npm install -g appium
+appium driver install uiautomator2
+```
+
+### Настройка устройства
+
+Подключи устройство по USB и проверь подключение:
+
+```bash
+adb devices
+```
+
+Укажи путь к APK в `tests/ui/bookmarks/config/settings.py`:
+
+```python
+_APP_PATH = r"C:\path\to\mapsme.apk"
+```
+
+Или через переменную окружения:
+
+```bash
+# Windows PowerShell
+$env:APP_PATH = "C:\path\to\mapsme.apk"
+```
+
+### Запуск
+
+```bash
+# Сначала запусти Appium
+appium
+
+# Все тесты меток
+pytest tests/ui/bookmarks/ --log-cli-level=INFO
+
+# Только smoke-тесты
+pytest tests/ui/bookmarks/ -m smoke
+
+# Конкретный модуль
+pytest tests/ui/bookmarks/test_bookmark_creation.py -v
+
+# С Allure-отчётом
+pytest tests/ui/bookmarks/ --alluredir=reports/allure_results
+allure serve reports/allure_results
+```
+
+### Параметры подключения (bookmarks/config/settings.py)
+
+| Параметр | Значение |
+|---|---|
+| Appium URL | `http://127.0.0.1:4723` |
+| Platform | Android |
+| App package | `com.mapswithme.maps.pro` |
+| Automation | UiAutomator2 |
+| noReset | `True` (сохраняет состояние приложения) |
+
+---
+
 ## Покрытие тестами
 
 | Область | Тестов | Статус |
@@ -168,3 +270,10 @@ pytest tests/ui/test_ui.py -v
 | Subscriptions | 6 | ✅ |
 | Payment / Purchase | 9 | ✅ |
 | UI: Subscription flow | 6 | ✅ (требует Appium) |
+| UI: Создание меток | 5 | ✅ (требует устройство) |
+| UI: Редактирование меток | 5 | ✅ (требует устройство) |
+| UI: Удаление меток | 4 | ✅ (требует устройство) |
+| UI: Управление папками | 6 | ✅ (требует устройство) |
+| UI: Отображение на карте | 5 | ✅ (требует устройство) |
+| UI: Поиск и сортировка | 7 | ✅ (требует устройство) |
+| UI: Оффлайн / синхронизация | 5 | ✅ (требует устройство) |
